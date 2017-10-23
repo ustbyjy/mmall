@@ -17,34 +17,39 @@
             <arg column="update_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
         </constructor>
     </resultMap>
+
     <sql id="Base_Column_List">
-    id, category_id, name, subtitle, main_image, sub_images, detail, price, stock, status, 
-    create_time, update_time
-  </sql>
+        id, category_id, name, subtitle, main_image, sub_images, detail, price, stock, status,
+        create_time, update_time
+    </sql>
+
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
         select
         <include refid="Base_Column_List" />
-        from mmall_product
+        from product
         where id = #{id,jdbcType=INTEGER}
     </select>
+
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-    delete from mmall_product
-    where id = #{id,jdbcType=INTEGER}
-  </delete>
+        DELETE FROM product
+        WHERE id = #{id,jdbcType=INTEGER}
+    </delete>
+
     <insert id="insert" parameterType="com.mmall.pojo.Product">
-    insert into mmall_product (id, category_id, name, 
-      subtitle, main_image, sub_images, 
-      detail, price, stock, 
-      status, create_time, update_time
-      )
-    values (#{id,jdbcType=INTEGER}, #{categoryId,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, 
-      #{subtitle,jdbcType=VARCHAR}, #{mainImage,jdbcType=VARCHAR}, #{subImages,jdbcType=VARCHAR}, 
-      #{detail,jdbcType=VARCHAR}, #{price,jdbcType=DECIMAL}, #{stock,jdbcType=INTEGER}, 
-      #{status,jdbcType=INTEGER}, now(), now()
-      )
-  </insert>
+        INSERT INTO product (id, category_id, name,
+                             subtitle, main_image, sub_images,
+                             detail, price, stock,
+                             status, create_time, update_time
+        )
+        VALUES (#{id,jdbcType=INTEGER}, #{categoryId,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR},
+                                        #{subtitle,jdbcType=VARCHAR}, #{mainImage,jdbcType=VARCHAR}, #{subImages,jdbcType=VARCHAR},
+                                        #{detail,jdbcType=VARCHAR}, #{price,jdbcType=DECIMAL}, #{stock,jdbcType=INTEGER},
+                                        #{status,jdbcType=INTEGER}, now(), now()
+        )
+    </insert>
+
     <insert id="insertSelective" parameterType="com.mmall.pojo.Product">
-        insert into mmall_product
+        insert into product
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">
                 id,
@@ -122,8 +127,9 @@
             </if>
         </trim>
     </insert>
+
     <update id="updateByPrimaryKeySelective" parameterType="com.mmall.pojo.Product">
-        update mmall_product
+        update product
         <set>
             <if test="categoryId != null">
                 category_id = #{categoryId,jdbcType=INTEGER},
@@ -161,35 +167,34 @@
         </set>
         where id = #{id,jdbcType=INTEGER}
     </update>
-    <update id="updateByPrimaryKey" parameterType="com.mmall.pojo.Product">
-    update mmall_product
-    set category_id = #{categoryId,jdbcType=INTEGER},
-      name = #{name,jdbcType=VARCHAR},
-      subtitle = #{subtitle,jdbcType=VARCHAR},
-      main_image = #{mainImage,jdbcType=VARCHAR},
-      sub_images = #{subImages,jdbcType=VARCHAR},
-      detail = #{detail,jdbcType=VARCHAR},
-      price = #{price,jdbcType=DECIMAL},
-      stock = #{stock,jdbcType=INTEGER},
-      status = #{status,jdbcType=INTEGER},
-      create_time = #{createTime,jdbcType=TIMESTAMP},
-      update_time = now()
-    where id = #{id,jdbcType=INTEGER}
-  </update>
 
+    <update id="updateByPrimaryKey" parameterType="com.mmall.pojo.Product">
+        UPDATE product
+        SET category_id = #{categoryId,jdbcType=INTEGER},
+            name        = #{name,jdbcType=VARCHAR},
+            subtitle    = #{subtitle,jdbcType=VARCHAR},
+            main_image  = #{mainImage,jdbcType=VARCHAR},
+            sub_images  = #{subImages,jdbcType=VARCHAR},
+            detail      = #{detail,jdbcType=VARCHAR},
+            price       = #{price,jdbcType=DECIMAL},
+            stock       = #{stock,jdbcType=INTEGER},
+            status      = #{status,jdbcType=INTEGER},
+            create_time = #{createTime,jdbcType=TIMESTAMP},
+            update_time = now()
+        WHERE id = #{id,jdbcType=INTEGER}
+    </update>
 
     <select id="selectList" resultMap="BaseResultMap">
         SELECT
         <include refid="Base_Column_List" />
-        from mmall_product
+        from product
         ORDER BY id asc
     </select>
-
 
     <select id="selectByNameAndProductId" resultMap="BaseResultMap" parameterType="map">
         SELECT
         <include refid="Base_Column_List" />
-        from mmall_product
+        from product
         <where>
             <if test="productName != null">
                 and name like #{productName}
@@ -203,7 +208,7 @@
     <select id="selectByNameAndCategoryIds" resultMap="BaseResultMap" parameterType="map">
         SELECT
         <include refid="Base_Column_List"></include>
-        from mmall_product
+        from product
         where status = 1
         <if test="productName != null">
             and name like #{productName}

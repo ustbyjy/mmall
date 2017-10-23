@@ -164,7 +164,6 @@ public class UserServiceImpl implements IUserService {
         return ServerResponse.createByErrorMessage("更新个人信息失败");
     }
 
-
     public ServerResponse<User> getInformation(Integer userId) {
         User user = userMapper.selectByPrimaryKey(userId);
         if (user == null) {
@@ -174,6 +173,8 @@ public class UserServiceImpl implements IUserService {
         return ServerResponse.createBySuccess(user);
 
     }
+
+    // backend
 
     /**
      * 校验是否是管理员（backend）
