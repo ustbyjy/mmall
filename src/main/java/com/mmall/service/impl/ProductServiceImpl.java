@@ -129,8 +129,7 @@ public class ProductServiceImpl implements IProductService {
             ProductListVo productListVo = assembleProductListVo(productItem);
             productListVoList.add(productListVo);
         }
-        PageInfo pageResult = new PageInfo(productList);
-        pageResult.setList(productListVoList);
+        PageInfo<ProductListVo> pageResult = new PageInfo<ProductListVo>(productListVoList);
         return ServerResponse.createBySuccess(pageResult);
     }
 
@@ -158,8 +157,7 @@ public class ProductServiceImpl implements IProductService {
             ProductListVo productListVo = assembleProductListVo(productItem);
             productListVoList.add(productListVo);
         }
-        PageInfo pageResult = new PageInfo(productList);
-        pageResult.setList(productListVoList);
+        PageInfo<ProductListVo> pageResult = new PageInfo<ProductListVo>(productListVoList);
         return ServerResponse.createBySuccess(pageResult);
     }
 
@@ -192,7 +190,7 @@ public class ProductServiceImpl implements IProductService {
                 // 没有该分类，并且还没有关键字，这个时候返回一个空的结果集，不报错
                 PageHelper.startPage(pageNum, pageSize);
                 List<ProductListVo> productListVoList = Lists.newArrayList();
-                PageInfo pageInfo = new PageInfo(productListVoList);
+                PageInfo<ProductListVo> pageInfo = new PageInfo<ProductListVo>(productListVoList);
                 return ServerResponse.createBySuccess(pageInfo);
             }
             categoryIdList = iCategoryService.selectCategoryAndChildrenById(category.getId()).getData();
@@ -217,10 +215,8 @@ public class ProductServiceImpl implements IProductService {
             productListVoList.add(productListVo);
         }
 
-        PageInfo pageInfo = new PageInfo(productList);
-        pageInfo.setList(productListVoList);
+        PageInfo<ProductListVo> pageInfo = new PageInfo<ProductListVo>(productListVoList);
         return ServerResponse.createBySuccess(pageInfo);
     }
-
 
 }

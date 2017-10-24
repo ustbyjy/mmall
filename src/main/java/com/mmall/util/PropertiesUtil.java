@@ -33,13 +33,8 @@ public class PropertiesUtil {
     }
 
     public static String getProperty(String key, String defaultValue) {
-
-        String value = props.getProperty(key.trim());
-        if (StringUtils.isBlank(value)) {
-            value = defaultValue;
-        }
-        return value.trim();
+        String value = getProperty(key);
+        return value != null ? value.trim() : defaultValue;
     }
-
 
 }

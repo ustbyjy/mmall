@@ -419,7 +419,7 @@ public class OrderServiceImpl implements IOrderService {
 
                 File targetFile = new File(path, qrFileName);
                 try {
-                    FTPUtil.uploadFile(Lists.newArrayList(targetFile));
+                    FTPUtil.uploadFile("img", Lists.newArrayList(targetFile));
                 } catch (IOException e) {
                     logger.error("上传二维码异常", e);
                 }

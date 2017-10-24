@@ -7,14 +7,11 @@ public class ProductListVo {
 
     private Integer id;
     private Integer categoryId;
-
     private String name;
     private String subtitle;
     private String mainImage;
     private BigDecimal price;
-
     private Integer status;
-
     private String imageHost;
 
     public Integer getId() {
@@ -79,5 +76,20 @@ public class ProductListVo {
 
     public void setImageHost(String imageHost) {
         this.imageHost = imageHost;
+    }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("ProductListVo{");
+        sb.append("id=").append(id);
+        sb.append(", categoryId=").append(categoryId);
+        sb.append(", name='").append(name).append('\'');
+        sb.append(", subtitle='").append(subtitle).append('\'');
+        sb.append(", mainImage='").append(mainImage).append('\'');
+        sb.append(", price=").append(price);
+        sb.append(", status=").append(status);
+        sb.append(", imageHost='").append(imageHost).append('\'');
+        sb.append('}');
+        return sb.toString();
     }
 }

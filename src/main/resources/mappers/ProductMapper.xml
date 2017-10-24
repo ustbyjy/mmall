@@ -185,14 +185,14 @@
     </update>
 
     <select id="selectList" resultMap="BaseResultMap">
-        SELECT
+        select
         <include refid="Base_Column_List" />
         from product
-        ORDER BY id asc
+        order by id asc
     </select>
 
     <select id="selectByNameAndProductId" resultMap="BaseResultMap" parameterType="map">
-        SELECT
+        select
         <include refid="Base_Column_List" />
         from product
         <where>
@@ -206,7 +206,7 @@
     </select>
 
     <select id="selectByNameAndCategoryIds" resultMap="BaseResultMap" parameterType="map">
-        SELECT
+        select
         <include refid="Base_Column_List"></include>
         from product
         where status = 1
