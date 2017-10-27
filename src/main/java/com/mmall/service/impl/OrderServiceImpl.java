@@ -47,9 +47,9 @@ public class OrderServiceImpl implements IOrderService {
     static {
 
         /** 一定要在创建AlipayTradeService之前调用Configs.init()设置默认参数
-         *  Configs会读取classpath下的zfbinfo.properties文件配置信息，如果找不到该文件则确认该文件是否在classpath目录
+         *  Configs会读取classpath下的zfb_info.properties文件配置信息，如果找不到该文件则确认该文件是否在classpath目录
          */
-        Configs.init("zfbinfo.properties");
+        Configs.init("zfb_info.properties");
 
         /** 使用Configs提供的默认参数
          *  AlipayTradeService可以使用单例或者为静态成员对象，不需要反复new
@@ -313,8 +313,7 @@ public class OrderServiceImpl implements IOrderService {
         PageHelper.startPage(pageNum, pageSize);
         List<Order> orderList = orderMapper.selectByUserId(userId);
         List<OrderVo> orderVoList = assembleOrderVoList(orderList, userId);
-        PageInfo pageResult = new PageInfo(orderList);
-        pageResult.setList(orderVoList);
+        PageInfo<OrderVo> pageResult = new PageInfo<OrderVo>(orderVoList);
         return ServerResponse.createBySuccess(pageResult);
     }
 
@@ -347,7 +346,7 @@ public class OrderServiceImpl implements IOrderService {
         String outTradeNo = order.getOrderNo().toString();
 
         // (必填) 订单标题，粗略描述用户的支付目的。如“xxx品牌xxx门店当面付扫码消费”
-        String subject = new StringBuilder().append("happymmall扫码支付,订单号:").append(outTradeNo).toString();
+        String subject = new StringBuilder().append("mmall扫码支付，订单号:").append(outTradeNo).toString();
 
         // (必填) 订单总金额，单位为元，不能超过1亿元
         // 如果同时传入了【打折金额】,【不可打折金额】,【订单总金额】三者,则必须满足如下条件:【订单总金额】=【打折金额】+【不可打折金额】
@@ -355,7 +354,7 @@ public class OrderServiceImpl implements IOrderService {
 
         // (可选) 订单不可打折金额，可以配合商家平台配置折扣活动，如果酒水不参与打折，则将对应金额填写至此字段
         // 如果该值未传入,但传入了【订单总金额】,【打折金额】,则该值默认为【订单总金额】-【打折金额】
-        String undiscountableAmount = "0";
+        String unDiscountableAmount = "0";
 
         // 卖家支付宝账号ID，用于支持一个签约账号下支持打款到不同的收款账号，(打款到sellerId对应的支付宝账号)
         // 如果该字段为空，则默认为与支付宝签约的商户的PID，也就是appid对应的PID
@@ -383,7 +382,7 @@ public class OrderServiceImpl implements IOrderService {
         List<OrderItem> orderItemList = orderItemMapper.getByOrderNoUserId(orderNo, userId);
         for (OrderItem orderItem : orderItemList) {
             GoodsDetail goods = GoodsDetail.newInstance(orderItem.getProductId().toString(), orderItem.getProductName(),
-                    BigDecimalUtil.mul(orderItem.getCurrentUnitPrice().doubleValue(), new Double(100).doubleValue()).longValue(),
+                    BigDecimalUtil.mul(orderItem.getCurrentUnitPrice().doubleValue(), 100L).longValue(),
                     orderItem.getQuantity());
             goodsDetailList.add(goods);
         }
@@ -391,7 +390,7 @@ public class OrderServiceImpl implements IOrderService {
         // 创建扫码支付请求builder，设置请求参数
         AlipayTradePrecreateRequestBuilder builder = new AlipayTradePrecreateRequestBuilder()
                 .setSubject(subject).setTotalAmount(totalAmount).setOutTradeNo(outTradeNo)
-                .setUndiscountableAmount(undiscountableAmount).setSellerId(sellerId).setBody(body)
+                .setUndiscountableAmount(unDiscountableAmount).setSellerId(sellerId).setBody(body)
                 .setOperatorId(operatorId).setStoreId(storeId).setExtendParams(extendParams)
                 .setTimeoutExpress(timeoutExpress)
                 .setNotifyUrl(PropertiesUtil.getProperty("alipay.callback.url"))//支付宝服务器主动通知商户服务器里指定的页面http路径,根据需要设置
@@ -458,7 +457,7 @@ public class OrderServiceImpl implements IOrderService {
         String tradeStatus = params.get("trade_status");
         Order order = orderMapper.selectByOrderNo(orderNo);
         if (order == null) {
-            return ServerResponse.createByErrorMessage("非快乐慕商城的订单，回调忽略");
+            return ServerResponse.createByErrorMessage("商城的订单，回调忽略");
         }
         if (order.getStatus() >= Const.OrderStatusEnum.PAID.getCode()) {
             return ServerResponse.createBySuccess("支付宝重复调用");
@@ -494,14 +493,12 @@ public class OrderServiceImpl implements IOrderService {
     }
 
 
-    //backend
-
+    // backend
     public ServerResponse<PageInfo> manageList(int pageNum, int pageSize) {
         PageHelper.startPage(pageNum, pageSize);
         List<Order> orderList = orderMapper.selectAllOrder();
         List<OrderVo> orderVoList = this.assembleOrderVoList(orderList, null);
-        PageInfo pageResult = new PageInfo(orderList);
-        pageResult.setList(orderVoList);
+        PageInfo<OrderVo> pageResult = new PageInfo<OrderVo>(orderVoList);
         return ServerResponse.createBySuccess(pageResult);
     }
 
@@ -521,9 +518,7 @@ public class OrderServiceImpl implements IOrderService {
         if (order != null) {
             List<OrderItem> orderItemList = orderItemMapper.getByOrderNo(orderNo);
             OrderVo orderVo = assembleOrderVo(order, orderItemList);
-
-            PageInfo pageResult = new PageInfo(Lists.newArrayList(order));
-            pageResult.setList(Lists.newArrayList(orderVo));
+            PageInfo<OrderVo> pageResult = new PageInfo<OrderVo>(Lists.newArrayList(orderVo));
             return ServerResponse.createBySuccess(pageResult);
         }
         return ServerResponse.createByErrorMessage("订单不存在");
@@ -541,6 +536,5 @@ public class OrderServiceImpl implements IOrderService {
         }
         return ServerResponse.createByErrorMessage("订单不存在");
     }
-
 
 }
