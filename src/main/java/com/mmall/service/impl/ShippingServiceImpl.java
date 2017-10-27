@@ -40,7 +40,6 @@ public class ShippingServiceImpl implements IShippingService {
         return ServerResponse.createByErrorMessage("删除地址失败");
     }
 
-
     public ServerResponse update(Integer userId, Shipping shipping) {
         shipping.setUserId(userId);
         int rowCount = shippingMapper.updateByShipping(shipping);
@@ -62,7 +61,7 @@ public class ShippingServiceImpl implements IShippingService {
     public ServerResponse<PageInfo> list(Integer userId, int pageNum, int pageSize) {
         PageHelper.startPage(pageNum, pageSize);
         List<Shipping> shippingList = shippingMapper.selectByUserId(userId);
-        PageInfo pageInfo = new PageInfo(shippingList);
+        PageInfo<Shipping> pageInfo = new PageInfo<Shipping>(shippingList);
         return ServerResponse.createBySuccess(pageInfo);
     }
 
