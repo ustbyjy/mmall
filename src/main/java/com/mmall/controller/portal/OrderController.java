@@ -99,12 +99,11 @@ public class OrderController {
         Map<String, String> params = Maps.newHashMap();
 
         Map requestParams = request.getParameterMap();
-        for (Iterator iter = requestParams.keySet().iterator(); iter.hasNext(); ) {
-            String name = (String) iter.next();
+        for (Iterator it = requestParams.keySet().iterator(); it.hasNext(); ) {
+            String name = (String) it.next();
             String[] values = (String[]) requestParams.get(name);
             String valueStr = "";
             for (int i = 0; i < values.length; i++) {
-
                 valueStr = (i == values.length - 1) ? valueStr + values[i] : valueStr + values[i] + ",";
             }
             params.put(name, valueStr);
